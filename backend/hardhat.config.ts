@@ -1,7 +1,7 @@
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
 
-module.exports = {
+const config: HardhatUserConfig = {
   solidity: {
     version: "0.8.19",
     settings: {
@@ -10,7 +10,7 @@ module.exports = {
       },
     },
   },
-  allowUnlimitedContractSize: true,
+  // allowUnlimitedContractSize: true,
   defaultNetwork: "hardhat",
   gasReporter: {
     currency: "USD",
@@ -20,31 +20,16 @@ module.exports = {
     coinmarketcap: process.env.CMC_API,
   },
   networks: {
-    hardhat: {
-      accounts: {
-        count: 10,
-        mnemonic: process.env.MNEMONIC,
-        initialIndex: Number(process.env.INITIAL_INDEX),
-      },
-      chainId: 31337,
-      gas: "auto",
-      blockGasLimit: 1000000000000
-    },
+    hardhat: {},
     POLYGON_ZKEVM_MAINNET: {
-      accounts: {
-        count: 10,
-        mnemonic: process.env.MNEMONIC,
-        initialIndex: Number(process.env.INITIAL_INDEX),
-      },
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       chainId: 1101,
       url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
     },
     POLYGON_ZKEVM_TESTNET: {
-      accounts: {
-        count: 10,
-        mnemonic: process.env.MNEMONIC,
-        initialIndex: Number(process.env.INITIAL_INDEX),
-      },
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
       chainId: 1442,
       url: `https://polygonzkevm-testnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
     },
@@ -57,6 +42,7 @@ module.exports = {
     cache: "./cache",
     sources: "./contracts",
     tests: "./test",
-  }
+  },
 };
 
+export default config;
