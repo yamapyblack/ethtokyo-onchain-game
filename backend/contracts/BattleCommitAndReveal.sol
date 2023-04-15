@@ -2,6 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 import "hardhat/console.sol";
 
@@ -41,6 +42,7 @@ contract BattleCommitAndReveal is Ownable {
     // ------------------------- parameters -------------------------
     uint40 public stageSpan;
     uint8 public maxLoop;
+    address public nft;
 
     // ------------------------- state -------------------------
     address[2] public matchings;
@@ -52,9 +54,10 @@ contract BattleCommitAndReveal is Ownable {
     Result[] public results;
 
     // ------------------------- constructor -------------------------
-    constructor() {
+    constructor(address _nft) {
         stageSpan = 15;
         maxLoop = 2;
+        nft = _nft;
     }
 
     // ------------------------- onwers functions -------------------------
@@ -71,7 +74,9 @@ contract BattleCommitAndReveal is Ownable {
     }
 
     // ------------------------- external functions -------------------------
-    function enter() external virtual {
+    function enter(uint _tokenId) external virtual {
+        require(IERC721(nft).ownerOf(_tokenId) == msg.sender, "not nft owner");
+
         if (stage == Stage.None) {
             //player 0 enter
             matchings[0] = msg.sender;

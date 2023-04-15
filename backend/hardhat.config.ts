@@ -11,8 +11,6 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  // allowUnlimitedContractSize: true,
-  defaultNetwork: "hardhat",
   gasReporter: {
     currency: "USD",
     enabled: process.env.REPORT_GAS ? true : false,
@@ -21,16 +19,7 @@ const config: HardhatUserConfig = {
     coinmarketcap: process.env.CMC_API,
   },
   networks: {
-    hardhat: {
-      accounts: {
-        count: 10,
-        mnemonic: process.env.MNEMONIC,
-        initialIndex: Number(process.env.INITIAL_INDEX),
-      },
-      chainId: 31337,
-      gas: "auto",
-      blockGasLimit: 1000000000000
-    },
+    hardhat: {},
     // goerli: {
     //   accounts: [process.env.PRIVATE_KEY_LIVE],
     //   chainId: 5,
@@ -63,8 +52,8 @@ const config: HardhatUserConfig = {
       mainnet: `${process.env.ETHERSCAN_API_KEY}`,
       goerli: `${process.env.ETHERSCAN_API_KEY}`,
       polygon: `${process.env.POLYGONSCAN_API_KEY}`,
-      polygonMumbai: `${process.env.POLYGONSCAN_API_KEY}`
-    }
+      polygonMumbai: `${process.env.POLYGONSCAN_API_KEY}`,
+    },
   },
   paths: {
     artifacts: "./artifacts",
