@@ -93,13 +93,13 @@ export default function NftMinter({
                   <div>
                     {txHash.slice(0, 6)}...{txHash.slice(6, 10)}
                   </div>
-                  <img
+                  {/* <img
                     src={
                       "https://static.alchemyapi.io/images/cw3d/Icon%20Large/etherscan-l.svg"
                     }
                     width="20px"
                     height="20px"
-                  />
+                  /> */}
                 </div>
               </a>
             </div>

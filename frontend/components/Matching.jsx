@@ -59,11 +59,11 @@ export default function Matching({
         </div>
 
         <div className={styles.nft_info}>
-          <h1 className={styles.nft_title}>Matching</h1>
-          <p className={styles.text}>
+          <h1 className={styles.nft_title}>Matching...</h1>
+          <p className={styles.text}>Connect your wallet and click enter now to get assigned an opponent.
           </p>
           {isDisconnected ? (
-            <p>Connect your wallet to get started</p>
+            <p>Connect your wallet to get started!</p>
           ) : !txHash ? (
             <button
               className={`${styles.button} ${
@@ -72,7 +72,7 @@ export default function Matching({
               disabled={isEntering}
               onClick={async () => await enter()}
             >
-              {isEntering ? "Etnering" : "Enter Now"}
+              {isEntering ? "Entering" : "Enter Now"}
             </button>
           ) : (
             <div>
@@ -88,7 +88,7 @@ export default function Matching({
                   </div>
                   <img
                     src={
-                      "https://static.alchemyapi.io/images/cw3d/Icon%20Large/etherscan-l.svg"
+                      "./bayc-standard.png"
                     }
                     width="20px"
                     height="20px"

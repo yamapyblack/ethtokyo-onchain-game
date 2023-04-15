@@ -93,17 +93,15 @@ export default function Commit({
         </div>
 
         <div className={styles.nft_info}>
-          <h1 className={styles.nft_title}>Create Web3 Dapp NFT</h1>
-          <h3 className={styles.nft_author}>By Alchemy.eth</h3>
+          <h1 className={styles.nft_title}>STRATEGY ROUND</h1>
           <p className={styles.text}>
-            Bootstrap a full stack dapp in 5 minutes with customizable
-            components and project templates using Create Web3 Dapp.
+            You have been matched with an opponent. 
+            Guess your opponenets' attribute and choose the most effective attack!
           </p>
           <hr className={styles.break} />
-          <h3 className={styles.nft_instructions_title}>INSTRUCTIONS</h3>
+          <h3 className={styles.nft_instructions_title}>ATTACK TYPE</h3>
           <p className={styles.text}>
-            This NFT is on MATIC Mumbai. You’ll need some test MATIC to mint the
-            NFT. <a href="https://mumbaifaucet.com/">Get free test MATIC</a>
+            
           </p>
           {isDisconnected ? (
             <p>Connect your wallet to get started</p>
@@ -155,13 +153,13 @@ export default function Commit({
                   <div>
                     {txHash.slice(0, 6)}...{txHash.slice(6, 10)}
                   </div>
-                  <img
+                  {/* <img
                     src={
                       "https://static.alchemyapi.io/images/cw3d/Icon%20Large/etherscan-l.svg"
                     }
                     width="20px"
                     height="20px"
-                  />
+                  /> */}
                 </div>
               </a>
             </div>
