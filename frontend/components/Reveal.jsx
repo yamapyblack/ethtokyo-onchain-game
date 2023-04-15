@@ -99,30 +99,53 @@ export default function Reveal({
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          backgroundColor: 'white',
+          backgroundColor: 'black',
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
           borderRadius: '0.5rem',
+          border: "solid 1px white",
           padding: '1rem',
           zIndex: 10,
-          width: '40%',
+          width: '600px',
           textAlign: 'center',
+          color: 'white',
         }}
       >
-        <h2>Result</h2>
-        <p
-          style={{
-            fontSize: '2rem',
-            padding: '1rem',
-          }}>{result}</p>
+
+        <div>
+          <h2
+            style={{
+              margin: '1.5rem 0 0 0',
+            }}
+          >
+            {result == 1 ? (
+            'Win!!🥳') : ('Lose🥲')}
+            </h2>
+          <div
+            style={{
+              margin: '1.5rem',
+            }}
+          >
+            <img src=
+              {result == 1 ? (
+                "./winning-onchaingame.png") : ('./losing-onchaingame.png')
+              }
+              style={{
+                width: '60%',
+              }}
+            />
+          </div>
+        </div>
+        
+
         <button onClick={closePopupAndGoStage}
         style={{
-          backgroundColor: '#4A5568',
-          color: 'white',
+          backgroundColor: '#666',
           borderRadius: '0.25rem',
           padding: '0.5rem 1rem',
           fontSize: '1rem',
           cursor: 'pointer',
           border: 'none',
+          margin: '0.5rem',
         }}>OK</button>
       </div>
       )}
