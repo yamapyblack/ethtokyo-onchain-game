@@ -1,6 +1,5 @@
 import styles from "../styles/Home.module.css";
 import NftGallery from "../components/NftGallery"
-import NftMinter from "../components/NftMinter";
 import Matching from "../components/Matching";
 import Commit from "../components/Commit";
 import Reveal from "../components/Reveal";
