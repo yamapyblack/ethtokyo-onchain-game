@@ -71,7 +71,7 @@ contract BattleCommitAndReveal is Ownable {
     }
 
     // ------------------------- external functions -------------------------
-    function enter() external {
+    function enter() external virtual {
         if (stage == Stage.None) {
             //player 0 enter
             matchings[0] = msg.sender;
@@ -100,7 +100,7 @@ contract BattleCommitAndReveal is Ownable {
         }
     }
 
-    function commit(bytes32 _commitment) external {
+    function commit(bytes32 _commitment) external virtual {
         if (stageDeadline <= block.timestamp) {
             revert("cannot commit after deadline");
         }
@@ -133,7 +133,7 @@ contract BattleCommitAndReveal is Ownable {
     //     }
     // }
 
-    function reveal(Choice _choice, bytes32 _salt) public {
+    function reveal(Choice _choice, bytes32 _salt) public virtual {
         //valication check
         require(
             _choice == Choice.Fire ||
@@ -202,7 +202,7 @@ contract BattleCommitAndReveal is Ownable {
         loopCount = 0;
     }
 
-    function _judge() internal {
+    function _judge() internal virtual {
         CommitChoice memory player0Choice = players[0];
         CommitChoice memory player1Choice = players[1];
 

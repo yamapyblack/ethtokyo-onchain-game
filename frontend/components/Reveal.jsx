@@ -22,15 +22,15 @@ const encodeParameters = (types, values) => {
 };
 
 // NFT Minter component
-export default function Commit({
+export default function Reveal({
   contractAddress,
   tokenUri,
   abi,
   contentSrc,
   contentType,
   goNextStage,
-  setSalt,
-  setCoince,
+  salt,
+  choice,
 }) {
   // Get the user's wallet address and status of their connection to it
   const { address, isDisconnected } = useAccount();
@@ -38,45 +38,30 @@ export default function Commit({
   const { data: signer } = useSigner();
   // State hooks to track the transaction hash and whether or not the NFT is being minted
   const [txHash, setTxHash] = useState();
-  const [isCommiting, setIsCommiting] = useState(false);
+  const [isTx, setIsTx] = useState(false);
 
   // Function to mint a new NFT
-  const commit = async (choice) => {
+  const reveal = async () => {
     console.log("choice:", choice);
     console.log(tokenUri, contractAddress, address);
     const battleContract = new Contract(contractAddress, abi, signer);
 
-    //create random salt and store it
-    const rand = getRandomString(31);
-    console.log("rand:", rand);
-    const _salt = ethers.utils.formatBytes32String(rand);
-
-    //sign the commitment
-    const commitment = encodeParameters(
-      ["address", "uint8", "bytes32"],
-      [address, choice, _salt]
-    );
-
     try {
-      setIsCommiting(true);
+      setIsTx(true);
       // Call the smart contract function to mint a new NFT with the provided token URI and the user's address
-      const commitTx = await battleContract.commit(commitment);
+      const tx = await battleContract.reveal(choice, salt);
       // Set the transaction hash in state to display in the UI
-      setTxHash(commitTx?.hash);
+      setTxHash(tx?.hash);
       // Wait for the transaction to be processed
-      await commitTx.wait();
-      //set some state
-      setSalt(_salt);
-      setCoince(choice);
-
-      // Reset isCommiting and txHash in state
-      setIsCommiting(false);
-      setTxHash(null);      
+      await tx.wait();
+      // Reset isTx and txHash in state
+      setIsTx(false);
+      setTxHash(null);
       goNextStage();
     } catch (e) {
-      // If an error occurs, log it to the console and reset isCommiting to false
+      // If an error occurs, log it to the console and reset isTx to false
       console.log(e);
-      setIsCommiting(false);
+      setIsTx(false);
     }
   };
   return (
@@ -108,41 +93,15 @@ export default function Commit({
           {isDisconnected ? (
             <p>Connect your wallet to get started</p>
           ) : !txHash ? (
-            <div>
-            <div>
             <button
-              className={`${styles.button} ${styles.button_fire} ${
-                isCommiting && `${styles.isCommiting}`
-              } `}
-              disabled={isCommiting}
-              onClick={async () => await commit(1)}
+              className={`${styles.button} ${
+                isTx && `${styles.isTx}`
+              }`}
+              disabled={isTx}
+              onClick={async () => await reveal()}
             >
-              {isCommiting ? "Commiting" : "Fire"}
+              {isTx ? "Reveal" : "Reveal Now"}
             </button>
-            </div>
-            <div>
-            <button
-              className={`${styles.button} ${styles.button_leaf} ${
-                isCommiting && `${styles.isCommiting}`
-              } `}
-              disabled={isCommiting}
-              onClick={async () => await commit(2)}
-            >
-              {isCommiting ? "Commiting" : "Leaf"}
-            </button>
-            </div>
-            <div>
-            <button
-              className={`${styles.button} ${styles.button_water} ${
-                isCommiting && `${styles.isCommiting}`
-              } `}
-              disabled={isCommiting}
-              onClick={async () => await commit(3)}
-            >
-              {isCommiting ? "Commiting" : "Water"}
-            </button>
-            </div>
-            </div>
           ) : (
             <div>
               <h3 className={styles.attribute_input_label}>TX ADDRESS</h3>

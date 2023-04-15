@@ -75,13 +75,23 @@
 
 .button {
   border-radius: 8px;
-  background-color: green;
+  background-color: #0a6;
   padding: 8px 10px;
   font-weight: 700;
   margin-top: 1em;
   border: none;
   color: white;
   width: 150px;
+}
+
+.button_fire {
+  background-color: red;
+}
+.button_leaf {
+  background-color: green;
+}
+.button_water {
+  background-color: blue;
 }
 
 .transaction_box {

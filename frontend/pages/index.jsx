@@ -3,14 +3,20 @@ import InstructionsComponent from "../components/InstructionsComponent";
 import NftMinter from "../components/NftMinter";
 import Matching from "../components/Matching";
 import Commit from "../components/Commit";
+import Reveal from "../components/Reveal";
 import { useState } from "react";
 
 export default function Home() {
   const [stage, setStage] = useState(0);
+  const [salt, setSalt] = useState("");
+  const [choice, setCoince] = useState(0);
 
   const goNextStage = async () => {
     setStage(stage + 1);
   }
+
+  const contractAddress = "0x35e369Aa802a996F3c4A3debA04425F06175609D"
+  // 0xcd5A2BA5883CBFc341094f8fcdF96e9b18F6B529
 
   return (
     <div>
@@ -18,7 +24,7 @@ export default function Home() {
         {/* /* if stage is 0, show Matching component */}
         {stage == 0 && (
           <Matching
-          contractAddress={"0xcd5A2BA5883CBFc341094f8fcdF96e9b18F6B529"} 
+          contractAddress={contractAddress} 
           tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
           abi={abi}
           contentSrc={"https://ipfs.filebase.io/ipfs/QmNYViNW7BBpVJpSf7sJXqmYV2uoYfkq6jashoHTD6Dvgf"}
@@ -28,12 +34,26 @@ export default function Home() {
         )}
         {stage == 1 && (
           <Commit
-          contractAddress={"0xcd5A2BA5883CBFc341094f8fcdF96e9b18F6B529"} 
+          contractAddress={contractAddress} 
           tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
           abi={abi}
           contentSrc={"https://ipfs.filebase.io/ipfs/QmNYViNW7BBpVJpSf7sJXqmYV2uoYfkq6jashoHTD6Dvgf"}
           contentType={"video"}
           goNextStage={goNextStage}
+          setSalt={setSalt}
+          setCoince={setCoince}
+          />
+        )}        
+        {stage == 2 && (
+          <Reveal
+          contractAddress={contractAddress} 
+          tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
+          abi={abi}
+          contentSrc={"https://ipfs.filebase.io/ipfs/QmNYViNW7BBpVJpSf7sJXqmYV2uoYfkq6jashoHTD6Dvgf"}
+          contentType={"video"}
+          goNextStage={goNextStage}
+          salt={salt}
+          choice={choice}
           />
         )}        
       </main>
