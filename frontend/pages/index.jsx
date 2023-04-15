@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.css";
-import InstructionsComponent from "../components/InstructionsComponent";
+import NftGallery from "../components/NftGallery"
 import NftMinter from "../components/NftMinter";
 import Matching from "../components/Matching";
 import Commit from "../components/Commit";
@@ -7,7 +7,13 @@ import Reveal from "../components/Reveal";
 import { useState } from "react";
 
 export default function Home() {
-  const [stage, setStage] = useState(2);
+  /* stages
+   * 0: NftGallery
+   * 1: Matching
+   * 2: Commit
+   * 3: Reveal
+   */
+  const [stage, setStage] = useState(0);
   const [salt, setSalt] = useState("");
   const [choice, setCoince] = useState(0);
 
@@ -21,13 +27,20 @@ export default function Home() {
 
   const contractAddress = "0x35e369Aa802a996F3c4A3debA04425F06175609D"
   // 0xcd5A2BA5883CBFc341094f8fcdF96e9b18F6B529
+  const nftContractAddress = ""
 
   return (
     <div>
       <main className={styles.main}>
-        {/* /* if stage is 0, show Matching component */}
         {stage == 0 && (
-          <Matching
+          <NftGallery 
+            nftContractAddress={nftContractAddress}
+            abi={abi}
+            goNextStage={goNextStage}
+          />
+        )}
+        {stage == 1 && (
+          <Matching 
           contractAddress={contractAddress} 
           tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
           abi={abi}
@@ -36,7 +49,7 @@ export default function Home() {
           goNextStage={goNextStage}
           />
         )}
-        {stage == 1 && (
+        {stage == 2 && (
           <Commit
           contractAddress={contractAddress} 
           tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
@@ -48,7 +61,7 @@ export default function Home() {
           setCoince={setCoince}
           />
         )}        
-        {stage == 2 && (
+        {stage == 3 && (
           <Reveal
           contractAddress={contractAddress} 
           tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
