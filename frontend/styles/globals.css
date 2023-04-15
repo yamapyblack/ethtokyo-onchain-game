@@ -1,10 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,500;1,400&display=swap');
-
+@keyframes panning {
+	0% {
+	background-position: 0% 0%;
+	}
+	25% {
+	background-position: 100% 100%;
+	}
+	50% {
+	background-position: 100% 0%;
+	}
+	75% {
+	background-position: 0 100%;
+	}
+	200% {
+	background-position: 0 0;
+	}
+}
+@keyframes shrink {
+	0% {
+	  background-size: 100% 100%;
+	}
+	100% {
+	  background-size: 200% 200%;
+	}
+  }
 html,
 body {
-	background-color: black;
+	background-color: white;
 	font-family: 'Rubik';
 	font-weight: normal;
+	background-image: url('/background.png');
+	
+	position: relative;
+	height: 100%;
+	width: 100%;
+	background-size: 100%;
+	/* animation: panning 50s infinite linear; */
+	/* background-size: 150% 150%;
+  	background-position: center center;
+  	animation: shrink 5s infinite alternate; */
+}
+body {
 }
 h1{
 	margin-bottom: 1rem;

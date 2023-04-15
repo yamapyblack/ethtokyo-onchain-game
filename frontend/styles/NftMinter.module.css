@@ -2,11 +2,12 @@
   display: flex;
   justify-content: center;
   border: 1px solid #cfd9f0;
-  max-width: 814px;
+  max-width: 520px;
   margin: auto;
   padding: 20px;
   margin-top: 3rem;
   border-radius: 12px;
+  background-color: black;
 }
 
 .page_container {
@@ -35,7 +36,7 @@
   left: 0;
   border-radius: 20px;
   z-index: 1;
-  width: 350px;
+  width: 100%;
 }
 
 .nft_info {

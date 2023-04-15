@@ -1,7 +1,7 @@
 // Import CSS styles, and necessary modules from packages
 import styles from "../styles/NftMinter.module.css";
 import { Contract } from "alchemy-sdk";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAccount, useSigner } from "wagmi";
 
 // NFT Minter component
@@ -38,13 +38,45 @@ export default function Matching({
       // Reset isEntering and txHash in state
       setIsEntering(false);
       setTxHash(null);
-      goNextStage();
+      setIsStartInterval(true);
     } catch (e) {
       // If an error occurs, log it to the console and reset isEntering to false
       console.log(e);
       setIsEntering(false);
     }
   };
+
+  const [isStartInterval, setIsStartInterval] = useState(false);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if(!isStartInterval) return;
+      (async () => {
+        await getStage();
+      })();
+    }, 1000); // Execute every 1000ms (1 second)
+
+    // Clean up the interval when the component is unmounted or a dependency changes
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isStartInterval]); // Empty dependency array, so the effect only runs on mount and unmount
+
+  const getStage = async () => {
+    console.log(tokenUri, contractAddress, address);
+    // Create a new instance of the NFT contract using the contract address and ABI
+    try {
+      const battleContract = new Contract(contractAddress, abi, signer);
+      const _stage = await battleContract.stage();
+      console.log(_stage);
+      if(_stage == 2){
+        goNextStage();
+      }
+    } catch (e) {
+      // If an error occurs, log it to the console and reset isEntering to false
+      console.log(e);
+    }
+  }
+
   return (
     <div className={styles.page_flexBox}>
       <div className={styles.page_container}>
@@ -65,6 +97,7 @@ export default function Matching({
           {isDisconnected ? (
             <p>Connect your wallet to get started!</p>
           ) : !txHash ? (
+            <div>
             <button
               className={`${styles.button} ${
                 isEntering && `${styles.isEntering}`
@@ -74,6 +107,7 @@ export default function Matching({
             >
               {isEntering ? "Entering" : "Enter Now"}
             </button>
+            </div>
           ) : (
             <div>
               <h3 className={styles.attribute_input_label}>TX ADDRESS</h3>
