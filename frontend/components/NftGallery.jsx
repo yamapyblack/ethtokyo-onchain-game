@@ -22,12 +22,12 @@ export default function NftGallery({
   const [isTx, setIsTx] = useState(false);
 
 	const nfts = [
-		"https://public.bnbstatic.com/static/academy/uploads-original/68e621fd4a4e4e77a9de84cf9f6b2dd3.png",
-		"https://public.bnbstatic.com/static/academy/uploads-original/68e621fd4a4e4e77a9de84cf9f6b2dd3.png",
-		"https://public.bnbstatic.com/static/academy/uploads-original/68e621fd4a4e4e77a9de84cf9f6b2dd3.png",
-		"https://public.bnbstatic.com/static/academy/uploads-original/68e621fd4a4e4e77a9de84cf9f6b2dd3.png",
-		"https://public.bnbstatic.com/static/academy/uploads-original/68e621fd4a4e4e77a9de84cf9f6b2dd3.png",
-		"https://public.bnbstatic.com/static/academy/uploads-original/68e621fd4a4e4e77a9de84cf9f6b2dd3.png",
+		"nft1.png",
+		"nft2.png",
+		"nft3.png",
+		"nft4.png",
+		"nft5.png",
+		"nft6.png"
 	]
 
 	// Function to mint a new NFT

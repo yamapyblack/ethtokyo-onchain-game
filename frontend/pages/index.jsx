@@ -13,7 +13,7 @@ export default function Home() {
    * 2: Commit
    * 3: Reveal
    */
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(3);
   const [salt, setSalt] = useState("");
   const [choice, setCoince] = useState(0);
   const [tokenId, setTokenId] = useState();
