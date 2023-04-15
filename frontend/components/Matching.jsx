@@ -12,6 +12,7 @@ export default function Matching({
   contentSrc,
   contentType,
   goNextStage,
+  tokenId
 }) {
   // Get the user's wallet address and status of their connection to it
   const { address, isDisconnected } = useAccount();
@@ -30,7 +31,7 @@ export default function Matching({
       // Set isEntering to true to show that the transaction is being processed
       setIsEntering(true);
       // Call the smart contract function to mint a new NFT with the provided token URI and the user's address
-      const enterTx = await battleContract.enter();
+      const enterTx = await battleContract.enter(tokenId);
       // Set the transaction hash in state to display in the UI
       setTxHash(enterTx?.hash);
       // Wait for the transaction to be processed

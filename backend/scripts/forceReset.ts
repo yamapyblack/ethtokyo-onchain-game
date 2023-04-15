@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { BattleCommitAndReveal } from "../typechain-types/index";
 
 async function main() {
-  const battleAddress = "0x35e369Aa802a996F3c4A3debA04425F06175609D";
+  const battleAddress = "0x1F10736a2CAcCc02DED83f7B2d3D7Fd45AC824De";
   //set merkle root
   const battle = (await ethers.getContractAt(
     "BattleCommitAndReveal",

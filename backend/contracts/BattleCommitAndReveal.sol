@@ -55,7 +55,7 @@ contract BattleCommitAndReveal is Ownable {
 
     // ------------------------- constructor -------------------------
     constructor(address _nft) {
-        stageSpan = 15;
+        stageSpan = 10000000;
         maxLoop = 2;
         nft = _nft;
     }
@@ -243,7 +243,6 @@ contract BattleCommitAndReveal is Ownable {
                 }
             }
             //set results
-            uint _len = results.length;
             if (_winnerIdx == 0) {
                 Result memory _result = Result(
                     matchings[0],

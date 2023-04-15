@@ -23,7 +23,7 @@ export default function Reveal({
   // State hooks to track the transaction hash and whether or not the NFT is being minted
   const [txHash, setTxHash] = useState();
   const [isTx, setIsTx] = useState(false);
-  const [result, setResult] = useState(-1);
+  const [result, setResult] = useState(0);
   const [tmpStage, setTmpStage] = useState(0);
 
   const [isStartInterval, setIsStartInterval] = useState(false);
@@ -49,7 +49,7 @@ export default function Reveal({
       const _stage = await battleContract.stage();
       console.log(_stage);
 
-      if(_stage != 2){
+      if(_stage != 3){
         setTmpStage(_stage);
         const _result = await battleContract.getLastResult(address);
         console.log("_result", _result);
