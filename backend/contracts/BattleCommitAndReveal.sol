@@ -6,6 +6,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
 contract BattleCommitAndReveal is Ownable {
+    // ------------------------- event -------------------------
+    event Matching();
+
+    // ------------------------- enum -------------------------
     enum Choice {
         None,
         Fire,
@@ -20,25 +24,34 @@ contract BattleCommitAndReveal is Ownable {
         Reveal
     }
 
+    // ------------------------- structs -------------------------
     struct CommitChoice {
         address playerAddress;
         Choice choice;
         bytes32 commitment;
     }
 
-    // Parameters
+    struct Result {
+        address player0;
+        int8 player0Score;
+        address player1;
+        int8 player1Score;
+    }
+
+    // ------------------------- parameters -------------------------
     uint40 public stageSpan;
     uint8 public maxLoop;
 
-    // State variables
+    // ------------------------- state -------------------------
     address[2] public matchings;
     CommitChoice[2] public players;
     Stage public stage = Stage.None;
     uint40 public stageDeadline;
-    uint8 loopCount = 0;
+    uint8 public loopCount = 0;
     // [[0x0, +1][0x2, -1]],[[0x0, -1][0x2, +1]]...
-    mapping(address => int8)[] public results;
+    Result[] public results;
 
+    // ------------------------- constructor -------------------------
     constructor() {
         stageSpan = 15;
         maxLoop = 2;
@@ -54,13 +67,7 @@ contract BattleCommitAndReveal is Ownable {
     }
 
     function forceReset() external onlyOwner {
-        matchings[0] = address(0);
-        matchings[1] = address(0);
-        players[0] = CommitChoice(address(0), Choice.None, bytes32(0));
-        players[1] = CommitChoice(address(0), Choice.None, bytes32(0));
-        stage = Stage.None;
-        stageDeadline = 0;
-        loopCount = 0;
+        _resetStage();
     }
 
     // ------------------------- external functions -------------------------
@@ -78,6 +85,7 @@ contract BattleCommitAndReveal is Ownable {
             matchings[1] = msg.sender;
             stage = Stage.Commit;
             stageDeadline += stageSpan;
+            emit Matching();
         } else {
             revert("cannot enter");
         }
@@ -157,15 +165,13 @@ contract BattleCommitAndReveal is Ownable {
             players[0].choice != Choice.None && players[1].choice != Choice.None
         ) {
             _judge();
-            if (loopCount < maxLoop) {
+            if (loopCount < maxLoop - 1) {
                 //go to next game
                 stage = Stage.Commit;
                 stageDeadline += stageSpan;
                 loopCount++;
             } else {
-                stage = Stage.None;
-                stageDeadline = 0;
-                loopCount = 0;
+                _resetStage();
             }
         }
     }
@@ -174,17 +180,26 @@ contract BattleCommitAndReveal is Ownable {
     function forceReveal() external {
         if (stage == Stage.Reveal && stageDeadline <= block.timestamp) {
             _judge();
-            if (loopCount < maxLoop) {
+            if (loopCount < maxLoop - 1) {
                 //go to next game
                 stage = Stage.Commit;
                 stageDeadline += stageSpan;
                 loopCount++;
             } else {
-                stage = Stage.None;
-                stageDeadline = 0;
-                loopCount = 0;
+                _resetStage();
             }
         }
+    }
+
+    // ------------------------- internal functions -------------------------
+    function _resetStage() internal {
+        matchings[0] = address(0);
+        matchings[1] = address(0);
+        players[0] = CommitChoice(address(0), Choice.None, bytes32(0));
+        players[1] = CommitChoice(address(0), Choice.None, bytes32(0));
+        stage = Stage.None;
+        stageDeadline = 0;
+        loopCount = 0;
     }
 
     function _judge() internal {
@@ -194,41 +209,53 @@ contract BattleCommitAndReveal is Ownable {
         console.log(uint256(player0Choice.choice), "player0Choice.choice");
         console.log(uint256(player1Choice.choice), "player1Choice.choice");
 
-        uint8 _winnerIdx;
-        if (player0Choice.choice == Choice.None) {
-            _winnerIdx = 1;
-        } else if (player1Choice.choice == Choice.None) {
-            _winnerIdx = 0;
-        } else if (player0Choice.choice == Choice.Fire) {
-            if (player1Choice.choice == Choice.Water) {
-                _winnerIdx = 1;
-            } else if (player1Choice.choice == Choice.Leaf) {
-                _winnerIdx = 0;
-            }
-        } else if (player0Choice.choice == Choice.Water) {
-            if (player1Choice.choice == Choice.Fire) {
-                _winnerIdx = 0;
-            } else if (player1Choice.choice == Choice.Leaf) {
-                _winnerIdx = 1;
-            }
-        } else if (player0Choice.choice == Choice.Leaf) {
-            if (player1Choice.choice == Choice.Fire) {
-                _winnerIdx = 1;
-            } else if (player1Choice.choice == Choice.Water) {
-                _winnerIdx = 0;
-            }
+        //draw
+        if (player0Choice.choice == player1Choice.choice) {
+            //nothing to do
         } else {
-            revert("invalid choice");
-        }
-
-        //set results
-        uint _len = results.length;
-        if (_winnerIdx == 0) {
-            results[_len][matchings[0]] = 1;
-            results[_len][matchings[1]] = -1;
-        } else {
-            results[_len][matchings[0]] = -1;
-            results[_len][matchings[1]] = 1;
+            uint8 _winnerIdx;
+            if (player0Choice.choice == Choice.None) {
+                _winnerIdx = 1;
+            } else if (player1Choice.choice == Choice.None) {
+                _winnerIdx = 0;
+            } else if (player0Choice.choice == Choice.Fire) {
+                if (player1Choice.choice == Choice.Water) {
+                    _winnerIdx = 1;
+                } else if (player1Choice.choice == Choice.Leaf) {
+                    _winnerIdx = 0;
+                }
+            } else if (player0Choice.choice == Choice.Water) {
+                if (player1Choice.choice == Choice.Fire) {
+                    _winnerIdx = 0;
+                } else if (player1Choice.choice == Choice.Leaf) {
+                    _winnerIdx = 1;
+                }
+            } else if (player0Choice.choice == Choice.Leaf) {
+                if (player1Choice.choice == Choice.Fire) {
+                    _winnerIdx = 1;
+                } else if (player1Choice.choice == Choice.Water) {
+                    _winnerIdx = 0;
+                }
+            }
+            //set results
+            uint _len = results.length;
+            if (_winnerIdx == 0) {
+                Result memory _result = Result(
+                    matchings[0],
+                    1,
+                    matchings[1],
+                    -1
+                );
+                results.push(_result);
+            } else if (_winnerIdx == 1) {
+                Result memory _result = Result(
+                    matchings[0],
+                    -1,
+                    matchings[1],
+                    1
+                );
+                results.push(_result);
+            }
         }
 
         //clear players choices
@@ -246,14 +273,17 @@ contract BattleCommitAndReveal is Ownable {
     }
 
     function getLastResult(address _player) external view returns (int8) {
-        uint _len = results.length;
-        return results[_len - 1][_player];
+        Result memory _result = getLastResults();
+        if (_result.player0 == _player) {
+            return _result.player0Score;
+        } else if (_result.player1 == _player) {
+            return _result.player1Score;
+        }
     }
 
-    function getResult(
-        address _player,
-        uint _idx
-    ) external view returns (int8) {
-        return results[_idx][_player];
+    function getLastResults() public view returns (Result memory) {
+        uint _len = results.length;
+        if (_len == 0) revert("no result");
+        return results[results.length - 1];
     }
 }
