@@ -47,8 +47,8 @@ export default function Home() {
           contractAddress={contractAddress} 
           tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
           abi={abi}
-          contentSrc={"https://ipfs.filebase.io/ipfs/QmNYViNW7BBpVJpSf7sJXqmYV2uoYfkq6jashoHTD6Dvgf"}
-          contentType={"video"}
+          contentSrc={"./matching.gif"}
+          contentType={"image"}
           goNextStage={goNextStage}
           tokenId={tokenId}
           />

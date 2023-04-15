@@ -37,8 +37,8 @@ export default function Matching({
       // Wait for the transaction to be processed
       await enterTx.wait();
       // Reset isEntering and txHash in state
-      setIsEntering(false);
-      setTxHash(null);
+      // setIsEntering(false);
+      // setTxHash(null);
       setIsStartInterval(true);
     } catch (e) {
       // If an error occurs, log it to the console and reset isEntering to false

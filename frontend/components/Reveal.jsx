@@ -76,8 +76,8 @@ export default function Reveal({
       // Wait for the transaction to be processed
       await tx.wait();
       // Reset isTx and txHash in state
-      setIsTx(false);
-      setTxHash(null);
+      // setIsTx(false);
+      // setTxHash(null);
       setIsStartInterval(true);
     } catch (e) {
       // If an error occurs, log it to the console and reset isTx to false

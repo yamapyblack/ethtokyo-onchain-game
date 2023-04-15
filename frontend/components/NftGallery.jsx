@@ -62,20 +62,14 @@ export default function NftGallery({
 		<div className={styles.nft_gallery_page_container}>
 			{isDisconnected ? (
 				<p>Connect your wallet to get started</p>
-			) : !txHash ? (
+			) : (
 			<div className={styles.nft_gallery}>
-				<div className={styles.nfts_display}>
-					{nfts?.length ? (
-						nfts.map((nft,i) => {
-							return <NftCard nft={nft} mint={mint} index={i} />;
-						})
-					) : (
-						<p>No NFTs found for the selected address</p>
-					)}
-				</div>
-			</div>
-					) : (
-				<div>
+				{txHash ? (
+					<div
+					style={{
+						color: 'white',
+					}}
+>
 					<h3 className={styles.attribute_input_label}>TX ADDRESS</h3>
 					<a
 						href={`https://mumbai.polygonscan.com/tx/${txHash}`}
@@ -95,7 +89,19 @@ export default function NftGallery({
 							/>
 						</div>
 					</a>
-				</div>
+				</div>				
+				) : <></>}
+					<div className={styles.nfts_display}>
+						{nfts?.length ? (
+							nfts.map((nft,i) => {
+								return <NftCard nft={nft} mint={mint} index={i} />;
+							})
+						) : (
+							<p>No NFTs found for the selected address</p>
+						)}
+					</div>
+
+			</div>
 			)}
 		</div>
 	);
