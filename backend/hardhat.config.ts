@@ -11,8 +11,6 @@ const config: HardhatUserConfig = {
       },
     },
   },
-  // allowUnlimitedContractSize: true,
-  defaultNetwork: "hardhat",
   gasReporter: {
     currency: "USD",
     enabled: process.env.REPORT_GAS ? true : false,
@@ -22,12 +20,26 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {},
-    POLYGON_ZKEVM_MAINNET: {
-      accounts:
-        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-      chainId: 1101,
-      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
-    },
+    // goerli: {
+    //   accounts: [process.env.PRIVATE_KEY_LIVE],
+    //   chainId: 5,
+    //   url: `https://eth-goerli.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+    // },
+    // polygon: {
+    //   accounts: [process.env.PRIVATE_KEY_LIVE],
+    //   chainId: 80001,
+    //   url: `https://polygon-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
+    // },
+    // mumbai: {
+    //   accounts: [process.env.PRIVATE_KEY_LIVE],
+    //   chainId: 80001,
+    //   url: `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+    // },
+    // POLYGON_ZKEVM_MAINNET: {
+    //   accounts: [process.env.PRIVATE_KEY_LIVE],
+    //   chainId: 1101,
+    //   url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+    // },
     POLYGON_ZKEVM_TESTNET: {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
@@ -36,7 +48,12 @@ const config: HardhatUserConfig = {
     },
   },
   etherscan: {
-    apiKey: `${process.env.ETHERSCAN_API_KEY}`,
+    apiKey: {
+      mainnet: `${process.env.ETHERSCAN_API_KEY}`,
+      goerli: `${process.env.ETHERSCAN_API_KEY}`,
+      polygon: `${process.env.POLYGONSCAN_API_KEY}`,
+      polygonMumbai: `${process.env.POLYGONSCAN_API_KEY}`,
+    },
   },
   paths: {
     artifacts: "./artifacts",

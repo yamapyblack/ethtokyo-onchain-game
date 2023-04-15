@@ -4,11 +4,17 @@ import { Contract } from "alchemy-sdk";
 import { useEffect, useState } from "react";
 import { useAccount, useSigner } from "wagmi";
 
+const dummyNft1 = "0x0000000000000000000000000000000000000001";
+const dummyNft2 = "0x0000000000000000000000000000000000000002";
+
 // Defining the main component of the NFT gallery
 export default function NftGallery({
-	nftContractAddress,
-  abi,
+	nftCreatorAddress,
+	nftReaderAddress,
+	createAbi,
+	readerAbi,
   goNextStage,
+	setTokenId,
 }) {
   const { address, isDisconnected } = useAccount();
   const { data: signer } = useSigner();
@@ -25,14 +31,23 @@ export default function NftGallery({
 	]
 
 	// Function to mint a new NFT
-	const mint = async () => {
-		console.log(nftContractAddress, address);
-		const nftContract = new Contract(nftContractAddress, abi, signer);
+	const mint = async (nftTokenId) => {
+		console.log(address);
+		const nftCreatorContract = new Contract(nftCreatorAddress, createAbi, signer);
+		const nftReaderContract = new Contract(nftReaderAddress, readerAbi, signer);
+		const payload = await nftReaderContract.mockPayload(address, dummyNft1, nftTokenId);
+		console.log(payload);
+
 		try {
 			setIsTx(true);
-			const tx = await nftContract.mint();
+			const tx = await nftCreatorContract.mockNonblockingLzReceive(10109, '0xf69186dfBa60DdB133E91E9A4B5673624293d8F8', 0, payload);
 			setTxHash(tx?.hash);
 			await tx.wait();
+
+			//setTokenId
+			const mintedTokenId = (await nftCreatorContract.currentTokenId()) - 1;
+			setTokenId(mintedTokenId);
+
 			setIsTx(false);
 			setTxHash(null);
 			goNextStage();
@@ -51,8 +66,8 @@ export default function NftGallery({
 			<div className={styles.nft_gallery}>
 				<div className={styles.nfts_display}>
 					{nfts?.length ? (
-						nfts.map((nft) => {
-							return <NftCard nft={nft} mint={mint} />;
+						nfts.map((nft,i) => {
+							return <NftCard nft={nft} mint={mint} index={i} />;
 						})
 					) : (
 						<p>No NFTs found for the selected address</p>
@@ -86,61 +101,14 @@ export default function NftGallery({
 	);
 }
 
-function NftCard({ nft,mint }) {
+function NftCard({ nft,mint,index,setTokenId }) {
 	return (
 		<div className={styles.card_container}>
 			<div className={styles.image_container}	
-				onClick={async () => await mint()}>
+				onClick={async () => await mint(index)}>
 				<img src={nft}>
 				</img>
 			</div>
-			{/* {/* <div className={styles.info_container}>
-				<div className={styles.title_container}>
-					<h3>
-						{nft.title ? nft.tile?.length > 20
-							? `${nft.title.substring(0, 12)}...`
-							: nft.title : `${nft.symbol} ${nft.tokenId.substring(0,4)}`}
-					</h3>
-				</div>
-				<hr className={styles.separator} />
-				<div className={styles.symbol_contract_container}>
-					<div className={styles.symbol_container}>
-						<p>
-							{nft.collectionName &&
-							nft.collectionName.length > 20
-								? `${nft.collectionName.substring(0, 20)}`
-								: nft.collectionName}
-						</p>
-
-						{nft.verified == "verified" ? (
-							<img
-								src={
-									"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Twitter_Verified_Badge.svg/2048px-Twitter_Verified_Badge.svg.png"
-								}
-								width="20px"
-								height="20px"
-							/>
-						) : null}
-					</div>
-					<div className={styles.contract_container}>
-						<p className={styles.contract_container}>
-							{nft.contract?.slice(0, 6)}...
-							{nft.contract?.slice(38)}
-						</p>
-						<img
-							src={
-								"https://etherscan.io/images/brandassets/etherscan-logo-circle.svg"
-							}
-							width="15px"
-							height="15px"
-						/>
-					</div>
-				</div>
-
-				<div className={styles.description_container}>
-					<p>{nft.description}</p>
-				</div> }
-			</div> */}
 		</div>
 	);
 }

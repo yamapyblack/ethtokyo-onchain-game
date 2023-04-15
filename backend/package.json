@@ -1,26 +1,26 @@
 {
-	"name": "my-create-web3-dapp",
-	"version": "0.1.0",
-	"private": true,
-	"scripts": {
-		"build": "npx hardhat compile",
-		"deploy-testnet": "npx hardhat run ./scripts/MyContract_deploy.js --network POLYGON_ZKEVM_TESTNET",
-		"deploy": "npx hardhat run ./scripts/MyContract_deploy.js --network POLYGON_ZKEVM_MAINNET",
-		"node": "npx hardhat node",
-		"deploy-local": "npx hardhat run ./scripts/MyContract_deploy.js --network localhost"
-	},
-	"dependencies": {
-		"@openzeppelin/contracts": "^4.7.3",
-		"dotenv": "^16.0.2"
-	},
-	"devDependencies": {
-		"@nomicfoundation/hardhat-toolbox": "^1.0.2",
-		"@types/chai": "^4.3.4",
-		"@types/mocha": "^10.0.1",
-		"@types/node": "^18.15.11",
-		"chai": "^4.3.7",
-		"hardhat": "^2.10.1",
-		"ts-node": "^10.9.1",
-		"typescript": "^5.0.4"
-	}
+  "name": "my-create-web3-dapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "npx hardhat compile",
+    "deploy-testnet": "npx hardhat run ./scripts/MyContract_deploy.js --network POLYGON_ZKEVM_TESTNET",
+    "deploy": "npx hardhat run ./scripts/MyContract_deploy.js --network POLYGON_ZKEVM_MAINNET",
+    "node": "npx hardhat node",
+    "deploy-local": "npx hardhat run ./scripts/MyContract_deploy.js --network localhost"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.8.3",
+    "dotenv": "^16.0.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "chai": "^4.3.7",
+    "hardhat": "^2.10.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
 }

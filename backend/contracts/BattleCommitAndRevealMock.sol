@@ -2,10 +2,15 @@
 pragma solidity ^0.8.19;
 
 import {BattleCommitAndReveal} from "./BattleCommitAndReveal.sol";
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract BattleCommitAndRevealMock is BattleCommitAndReveal {
+    constructor(address _nft) BattleCommitAndReveal(_nft) {}
+
     // ------------------------- external functions -------------------------
-    function enter() external override {
+    function enter(uint _tokenId) external override {
+        require(IERC721(nft).ownerOf(_tokenId) == msg.sender, "not nft owner");
+
         if (stage == Stage.None) {
             //player 0 enter
             matchings[0] = msg.sender;
