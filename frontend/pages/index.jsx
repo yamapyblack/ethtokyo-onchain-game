@@ -7,12 +7,16 @@ import Reveal from "../components/Reveal";
 import { useState } from "react";
 
 export default function Home() {
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(2);
   const [salt, setSalt] = useState("");
   const [choice, setCoince] = useState(0);
 
   const goNextStage = async () => {
     setStage(stage + 1);
+  }
+
+  const goToStage = async (_stage) => {
+    setStage(_stage);
   }
 
   const contractAddress = "0x35e369Aa802a996F3c4A3debA04425F06175609D"
@@ -54,6 +58,7 @@ export default function Home() {
           goNextStage={goNextStage}
           salt={salt}
           choice={choice}
+          goToStage={goToStage}
           />
         )}        
       </main>
