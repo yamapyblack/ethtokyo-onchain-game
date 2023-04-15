@@ -7,7 +7,7 @@ import Reveal from "../components/Reveal";
 import { useState } from "react";
 
 export default function Home() {
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(2);
   const [salt, setSalt] = useState("");
   const [choice, setCoince] = useState(0);
 
@@ -25,20 +25,20 @@ export default function Home() {
         {stage == 0 && (
           <Matching
           contractAddress={contractAddress} 
-          tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
+          // tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
           abi={abi}
-          contentSrc={"https://ipfs.filebase.io/ipfs/QmNYViNW7BBpVJpSf7sJXqmYV2uoYfkq6jashoHTD6Dvgf"}
-          contentType={"video"}
+          contentSrc={"./matching.gif"}
+          contentType={"image"}
           goNextStage={goNextStage}
           />
         )}
         {stage == 1 && (
           <Commit
           contractAddress={contractAddress} 
-          tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
+          // tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
           abi={abi}
-          contentSrc={"https://ipfs.filebase.io/ipfs/QmNYViNW7BBpVJpSf7sJXqmYV2uoYfkq6jashoHTD6Dvgf"}
-          contentType={"video"}
+          contentSrc={"./fire.png"}
+          contentType={"image"}
           goNextStage={goNextStage}
           setSalt={setSalt}
           setCoince={setCoince}
@@ -47,10 +47,10 @@ export default function Home() {
         {stage == 2 && (
           <Reveal
           contractAddress={contractAddress} 
-          tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
+          // tokenUri={"https://ipfs.filebase.io/ipfs/QmcZMwBfYwRfysPyLaJzMk5RwsgXnVz7JDkbh6eRbAfSjJ/QmdeEmVuLKxhy63CfLkt193sYTRHLLCH6qzyghBS27k7uJ"} 
           abi={abi}
-          contentSrc={"https://ipfs.filebase.io/ipfs/QmNYViNW7BBpVJpSf7sJXqmYV2uoYfkq6jashoHTD6Dvgf"}
-          contentType={"video"}
+          contentSrc={"./water.png"}
+          contentType={"image"}
           goNextStage={goNextStage}
           salt={salt}
           choice={choice}
