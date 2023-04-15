@@ -6,8 +6,9 @@ import { arrayify } from "ethers/lib/utils";
 
 const encodeParameters = (types: string[], values: any[]): string => {
   const abi = new ethers.utils.AbiCoder();
-  return ethers.utils.keccak256(abi.encode(types, values));
+  return ethers.utils.solidityKeccak256(types, values);
 };
+
 describe("BattleCommitAndReveal", function () {
   let owner: SignerWithAddress;
   let alice: SignerWithAddress;
@@ -158,6 +159,30 @@ describe("BattleCommitAndReveal", function () {
       await expect(contract.getLastResult(bob.address)).to.revertedWith(
         "no result"
       );
+    });
+    it("success by encodeParameters", async function () {
+      //enter
+      await contract.connect(alice).enter();
+      await contract.connect(bob).enter();
+
+      const blindingFactor1 = ethers.utils.formatBytes32String("hoge");
+      const blindingFactor2 = ethers.utils.formatBytes32String("fuga");
+
+      const commitment1 = encodeParameters(
+        ["address", "uint8", "bytes32"],
+        [alice.address, 1, blindingFactor1]
+      );
+      const commitment2 = encodeParameters(
+        ["address", "uint8", "bytes32"],
+        [bob.address, 2, blindingFactor2]
+      );
+
+      //commit
+      await contract.connect(alice).commit(commitment1);
+      await contract.connect(bob).commit(commitment2);
+      //reveal
+      await contract.connect(alice).reveal(1, blindingFactor1);
+      await contract.connect(bob).reveal(2, blindingFactor2);
     });
   });
 });

@@ -3,9 +3,26 @@ import styles from "../styles/NftMinter.module.css";
 import { Contract } from "alchemy-sdk";
 import { useState } from "react";
 import { useAccount, useSigner } from "wagmi";
+import { ethers } from "ethers";
+
+function getRandomString(length){
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+  return result;
+}
+
+const encodeParameters = (types, values) => {
+  const abi = new ethers.utils.AbiCoder();
+  return ethers.utils.solidityKeccak256(types, values);
+};
 
 // NFT Minter component
-export default function Matching({
+export default function Commit({
   contractAddress,
   tokenUri,
   abi,
@@ -19,30 +36,44 @@ export default function Matching({
   const { data: signer } = useSigner();
   // State hooks to track the transaction hash and whether or not the NFT is being minted
   const [txHash, setTxHash] = useState();
-  const [isEntering, setIsEntering] = useState(false);
+  const [isCommiting, setIsCommiting] = useState(false);
+
+  const [salt, setSalt] = useState();
 
   // Function to mint a new NFT
-  const enter = async () => {
+  const commit = async (choice) => {
+    console.log("choice:", choice);
     console.log(tokenUri, contractAddress, address);
-    // Create a new instance of the NFT contract using the contract address and ABI
     const battleContract = new Contract(contractAddress, abi, signer);
+
+    //create random salt and store it
+    const rand = getRandomString(31);
+    console.log("rand:", rand);
+    const _salt = ethers.utils.formatBytes32String(rand);
+    setSalt(_salt);
+
+    //sign the commitment
+    const commitment = encodeParameters(
+      ["address", "uint8", "bytes32"],
+      [address, choice, _salt]
+    );
+
     try {
-      // Set isEntering to true to show that the transaction is being processed
-      setIsEntering(true);
+      setIsCommiting(true);
       // Call the smart contract function to mint a new NFT with the provided token URI and the user's address
-      const enterTx = await battleContract.enter();
+      const commitTx = await battleContract.commit(commitment);
       // Set the transaction hash in state to display in the UI
-      setTxHash(enterTx?.hash);
+      setTxHash(commitTx?.hash);
       // Wait for the transaction to be processed
-      await enterTx.wait();
-      // Reset isEntering and txHash in state
-      setIsEntering(false);
+      await commitTx.wait();
+      // Reset isCommiting and txHash in state
+      setIsCommiting(false);
       setTxHash(null);
       goNextStage();
     } catch (e) {
-      // If an error occurs, log it to the console and reset isEntering to false
+      // If an error occurs, log it to the console and reset isCommiting to false
       console.log(e);
-      setIsEntering(false);
+      setIsCommiting(false);
     }
   };
   return (
@@ -59,20 +90,30 @@ export default function Matching({
         </div>
 
         <div className={styles.nft_info}>
-          <h1 className={styles.nft_title}>Matching</h1>
+          <h1 className={styles.nft_title}>Create Web3 Dapp NFT</h1>
+          <h3 className={styles.nft_author}>By Alchemy.eth</h3>
           <p className={styles.text}>
+            Bootstrap a full stack dapp in 5 minutes with customizable
+            components and project templates using Create Web3 Dapp.
+          </p>
+          <hr className={styles.break} />
+          <h3 className={styles.nft_instructions_title}>INSTRUCTIONS</h3>
+          <p className={styles.text}>
+            This NFT is on MATIC Mumbai. You’ll need some test MATIC to mint the
+            NFT. <a href="https://mumbaifaucet.com/">Get free test MATIC</a>
           </p>
           {isDisconnected ? (
             <p>Connect your wallet to get started</p>
           ) : !txHash ? (
             <button
               className={`${styles.button} ${
-                isEntering && `${styles.isEntering}`
+                isCommiting && `${styles.isCommiting}`
               }`}
-              disabled={isEntering}
-              onClick={async () => await enter()}
+              disabled={isCommiting}
+              //TODO
+              onClick={async () => await commit(1)}
             >
-              {isEntering ? "Etnering" : "Enter Now"}
+              {isCommiting ? "Commiting" : "Commit Now"}
             </button>
           ) : (
             <div>
